@@ -8,12 +8,12 @@ docker build -t prometheus-vmware-exporter .
 
 ## Run
 ```sh
-docker run -b \
+sudo docker run -d -p 9512:9512 \
   --restart=always \
   --name=prometheus-vmware-exporter \
-  --env=ESX_HOST esx.domain.local \
-  --env=ESX_USERNAME user \
-  --env=ESX_PASSWORD password \
-  --env=ESX_LOG debug \
-  prometheus-vmware-exporter 
+  --env=ESX_HOST=192.168.175.50 \
+  --env=ESX_USERNAME=root \
+  --env=ESX_PASSWORD=abc-123 \
+  --env=ESX_LOG=debug \
+  pv-exporter 
 ```
