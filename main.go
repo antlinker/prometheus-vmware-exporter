@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 	"sync"
 	"time"
@@ -16,24 +17,24 @@ import (
 )
 
 var (
-	listen      string
-	logLevel    string
-	timeout     int
-	idleTimeout int64
+	listen            = ":9512"
+	logLevel          = "info"
+	timeout     int64 = 5
+	idleTimeout int64 = 7200
 
 	once   sync.Once
 	logger *log.Logger
 )
 
 func init() {
-	flag.StringVar(&listen, "listen", ":9512", "listen port")
-	flag.StringVar(&logLevel, "log", "info", "Log level must be, debug or info")
-	flag.IntVar(&timeout, "timeout", 1, "the seconds for request timeout")
-	flag.Int64Var(&idleTimeout, "idle_timeout", 7200, "delete scrape metrics if greater then idle_timeout seconds since last request for host")
+	flag.StringVar(&listen, "listen", env("ESX_LISTEN", listen), "listen port")
+	flag.StringVar(&logLevel, "log", env("ESX_LOG", logLevel), "Log level must be, debug or info")
+	flag.Int64Var(&timeout, "timeout", envInt64("ESX_TIMEOUT", timeout), "the seconds for request timeout")
+	flag.Int64Var(&idleTimeout, "idle_timeout", envInt64("ESX_IDLE_TIMEOUT", 7200), "delete scrape metrics if greater then idle_timeout seconds since last request for host")
 }
 
-func getTimeout(s string) (d int, err error) {
-	d, err = strconv.Atoi(s)
+func getTimeout(s string) (d int64, err error) {
+	d, err = strconv.ParseInt(s, 10, 0)
 	if err != nil {
 		d = timeout
 	}
@@ -43,6 +44,27 @@ func getTimeout(s string) (d int, err error) {
 		d = 60
 	}
 	return
+}
+
+func env(key, def string) string {
+	if x := os.Getenv(key); x != "" {
+		return x
+	}
+	return def
+}
+
+func envInt64(key string, def int64) int64 {
+	x := os.Getenv(key)
+	if x == "" {
+		return def
+	}
+	n, err := strconv.ParseInt(x, 10, 0)
+	if err != nil {
+		return def
+	}
+
+	return n
+
 }
 
 func handleMulti(w http.ResponseWriter, r *http.Request) {
@@ -67,7 +89,6 @@ func handleMulti(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		logger.Errorf("timeout %s invalid %s, use %v seconds", timeout, err, d)
 	}
-	// logger.Infof("timeout: %s", d)
 	// Handle 处理抓取请求
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(d)*time.Second)
 	defer cancel()
