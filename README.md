@@ -19,3 +19,10 @@ sudo docker run -d -p 9512:9512 \
   --env=ESX_LOG=debug \
   prometheus-vmware-exporter
 ```
+
+## Request
+
+```sh
+curl 'http://localhost:9512/vm?host=192.168.1.2&username=root&password=123456&timeout=5' \
+  -H 'Cache-Control: no-cache'
+```
