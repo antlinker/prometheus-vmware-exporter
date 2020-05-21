@@ -162,7 +162,7 @@ const htmlStr = `<!DOCTYPE html>
 
 func main() {
 	flag.Parse()
-	fmt.Println(defaultUsername, defaultPassword, timeout, logLevel, idleTimeout)
+	// fmt.Println(defaultUsername, defaultPassword, timeout, logLevel, idleTimeout)
 	initLogger()
 	msg := fmt.Sprintf("Exporter start on port %s", listen)
 	logger.Info(msg)
