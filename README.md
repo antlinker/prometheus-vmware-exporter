@@ -7,7 +7,7 @@ Collect metrics ESXi Host
 ```
 Usage of prometheus-vmware-exporter:
   -idle_timeout int
-        The host is requested beyond the specified idle seconds will be deleted, the default value can be overridden by ESX_IDLE_TIMEOUT (default 7200)
+        The host is not requested beyond the specified idle seconds will be deleted, the default value can be overridden by ESX_IDLE_TIMEOUT (default 7200)
   -listen string
         Listen port,the default value can be overridden by ESX_LISTEN (default ":9512")
   -log string
