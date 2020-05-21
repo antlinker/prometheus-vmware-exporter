@@ -76,7 +76,7 @@ func envInt64(key string, def int64) int64 {
 
 func handleMulti(w http.ResponseWriter, r *http.Request) {
 	opts := &collector.Options{
-		Host:     r.FormValue("host"),
+		Host:     r.FormValue("target"),
 		Username: r.FormValue("username"),
 		Password: r.FormValue("password"),
 	}
@@ -132,18 +132,18 @@ const htmlStr = `<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VMware Exporter</title>
 	<style>
-	p {
-		margin: 5px;
-	}
+	p { margin: 5px; }
+	label {	margin: 5px; }
+	input { margin: 5px; }
     </style>
   </head>
   <body>
     <h1>VMware Exporter</h1>
 	<p><a href="/metrics">Metrics</a></p>
 	<p>
-        <form action="/vm"" id="vm>
-            <label for="host">host: </label>
-            <input type="text" name="host" for="vm" placeholder="enter host or ip">
+		<form action="/vm"" id="vm">
+            <label for="target">target: </label>
+            <input type="text" name="target" for="vm" placeholder="enter target host or ip">
             <br>
             <label for="username">username: </label>
             <input type="text" name="username" for="vm" placeholder="username">
