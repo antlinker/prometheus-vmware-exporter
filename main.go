@@ -10,9 +10,10 @@ import (
 	"sync"
 	"time"
 
-	"prometheus-vmware-exporter/internal/collector"
-
+	"github.com/antlinker/prometheus-vmware-exporter/internal/collector"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/prometheus/common/version"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -35,6 +36,8 @@ func init() {
 	flag.StringVar(&logLevel, "log", env("ESX_LOG", logLevel), "Log level must be debug or info, the default value can be overridden by ESX_LOG")
 	flag.Int64Var(&timeout, "timeout", envInt64("ESX_TIMEOUT", timeout), "The seconds for request timeout, the default value can be overridden by ESX_TIMEOUT")
 	flag.Int64Var(&idleTimeout, "idle_timeout", envInt64("ESX_IDLE_TIMEOUT", 7200), "The host is requested beyond the specified idle seconds will be deleted, the default value can be overridden by ESX_IDLE_TIMEOUT")
+
+	prometheus.MustRegister(version.NewCollector(collector.Namespace + "_exporter"))
 }
 
 func getTimeout(s string) (d int64, err error) {
@@ -167,10 +170,14 @@ const htmlStr = `<!DOCTYPE html>
 
 func main() {
 	flag.Parse()
-	// fmt.Println(defaultUsername, defaultPassword, timeout, logLevel, idleTimeout)
 	initLogger()
-	msg := fmt.Sprintf("Exporter start on port %s", listen)
-	logger.Info(msg)
+
+	logger.Infof("Start %s_exporter version: %s", collector.Namespace, version.Info())
+	logger.Infof("Build context: %s", version.BuildContext())
+	logger.Info("The metrics path: /metrics")
+	logger.Info("The vmware ESXi path: /vm")
+	logger.Infof("Http listen address: %s", listen)
+
 	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/vm", handleMulti)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

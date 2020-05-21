@@ -20,12 +20,13 @@ import (
 	"github.com/vmware/govmomi/vim25/types"
 )
 
-const namespace = "vmware"
+// Namespace 命名空间
+const Namespace = "vmware"
 
 // createPrometheusHostPowerState 创建电源状态指标
 func createPrometheusHostPowerState(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "host",
 		Name:      "power_state",
 		Help:      "poweredOn 1, poweredOff 2, standBy 3, other 0",
@@ -35,7 +36,7 @@ func createPrometheusHostPowerState(factory promauto.Factory) *prometheus.GaugeV
 // createPrometheusHostBoot  创建主机启动时间指标
 func createPrometheusHostBoot(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "host",
 		Name:      "boot_timestamp_seconds",
 		Help:      "Uptime host",
@@ -45,7 +46,7 @@ func createPrometheusHostBoot(factory promauto.Factory) *prometheus.GaugeVec {
 // createPrometheusTotalCPU 创建cpu_max指标
 func createPrometheusTotalCPU(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "host",
 		Name:      "cpu_max",
 		Help:      "CPU total",
@@ -55,7 +56,7 @@ func createPrometheusTotalCPU(factory promauto.Factory) *prometheus.GaugeVec {
 // createPrometheusUsageCPU 创建cpu_usage指标
 func createPrometheusUsageCPU(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "host",
 		Name:      "cpu_usage",
 		Help:      "CPU Usage",
@@ -65,7 +66,7 @@ func createPrometheusUsageCPU(factory promauto.Factory) *prometheus.GaugeVec {
 // createPrometheusTotalMem 创建memory_max指标
 func createPrometheusTotalMem(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "host",
 		Name:      "memory_max",
 		Help:      "Memory max",
@@ -75,7 +76,7 @@ func createPrometheusTotalMem(factory promauto.Factory) *prometheus.GaugeVec {
 // createPrometheusUsageMem 创建memory_usage指标
 func createPrometheusUsageMem(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "host",
 		Name:      "memory_usage",
 		Help:      "Memory Usage",
@@ -85,7 +86,7 @@ func createPrometheusUsageMem(factory promauto.Factory) *prometheus.GaugeVec {
 // createPrometheusDiskOk 创建disk_ok指标
 func createPrometheusDiskOk(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "host",
 		Name:      "disk_ok",
 		Help:      "Disk is working normally",
@@ -95,7 +96,7 @@ func createPrometheusDiskOk(factory promauto.Factory) *prometheus.GaugeVec {
 // createPrometheusTotalDs 创建capacity_size指标
 func createPrometheusTotalDs(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "datastore",
 		Name:      "capacity_size",
 		Help:      "Datastore total",
@@ -105,7 +106,7 @@ func createPrometheusTotalDs(factory promauto.Factory) *prometheus.GaugeVec {
 // createPrometheusUsageDs 创建freespace_size指标
 func createPrometheusUsageDs(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "datastore",
 		Name:      "freespace_size",
 		Help:      "Datastore free",
@@ -115,7 +116,7 @@ func createPrometheusUsageDs(factory promauto.Factory) *prometheus.GaugeVec {
 // createPrometheusVMBoot 创建虚拟机启动时间指标
 func createPrometheusVMBoot(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "vm",
 		Name:      "boot_timestamp_seconds",
 		Help:      "VMWare VM boot time in seconds",
@@ -125,7 +126,7 @@ func createPrometheusVMBoot(factory promauto.Factory) *prometheus.GaugeVec {
 // createPrometheusVMCPUAval 创建vm_cpu_avaleblemhz指标
 func createPrometheusVMCPUAval(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "vm",
 		Name:      "cpu_avaleblemhz",
 		Help:      "VMWare VM usage CPU",
@@ -135,7 +136,7 @@ func createPrometheusVMCPUAval(factory promauto.Factory) *prometheus.GaugeVec {
 // createprometheusVMCPUUsage 创建vm_cpu_usagemhz指标
 func createprometheusVMCPUUsage(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "vm",
 		Name:      "cpu_usagemhz",
 		Help:      "VMWare VM usage CPU",
@@ -145,7 +146,7 @@ func createprometheusVMCPUUsage(factory promauto.Factory) *prometheus.GaugeVec {
 // createPrometheusVMNumCPU 创建vm_num_cpu指标
 func createPrometheusVMNumCPU(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "vm",
 		Name:      "num_cpu",
 		Help:      "Available number of cores",
@@ -155,7 +156,7 @@ func createPrometheusVMNumCPU(factory promauto.Factory) *prometheus.GaugeVec {
 // createPrometheusVMMemAval 创建vm_mem_avaleble指标
 func createPrometheusVMMemAval(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "vm",
 		Name:      "mem_avaleble",
 		Help:      "Available memory",
@@ -165,7 +166,7 @@ func createPrometheusVMMemAval(factory promauto.Factory) *prometheus.GaugeVec {
 // createPrometheusVMMemUsage 创建vm_mem_usage指标
 func createPrometheusVMMemUsage(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "vm",
 		Name:      "mem_usage",
 		Help:      "Usage memory",
@@ -175,7 +176,7 @@ func createPrometheusVMMemUsage(factory promauto.Factory) *prometheus.GaugeVec {
 // createPrometheusVMNetRec 创建vm_net_rec指标
 func createPrometheusVMNetRec(factory promauto.Factory) *prometheus.GaugeVec {
 	return factory.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: namespace,
+		Namespace: Namespace,
 		Subsystem: "vm",
 		Name:      "net_rec",
 		Help:      "Usage memory",
