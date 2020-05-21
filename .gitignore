@@ -1,3 +1,5 @@
 .idea
 k8s*.yml
 
+prometheus-vmware-exporter
+.vscode

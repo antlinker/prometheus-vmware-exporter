@@ -17,23 +17,30 @@ import (
 )
 
 var (
-	listen            = ":9512"
-	logLevel          = "info"
-	timeout     int64 = 5
-	idleTimeout int64 = 7200
+	listen                = ":9512"
+	logLevel              = "info"
+	timeout         int64 = 5
+	defaultUsername string
+	defaultPassword string
+	idleTimeout     int64 = 7200
 
 	once   sync.Once
 	logger *log.Logger
 )
 
 func init() {
-	flag.StringVar(&listen, "listen", env("ESX_LISTEN", listen), "listen port")
-	flag.StringVar(&logLevel, "log", env("ESX_LOG", logLevel), "Log level must be, debug or info")
-	flag.Int64Var(&timeout, "timeout", envInt64("ESX_TIMEOUT", timeout), "the seconds for request timeout")
-	flag.Int64Var(&idleTimeout, "idle_timeout", envInt64("ESX_IDLE_TIMEOUT", 7200), "delete scrape metrics if greater then idle_timeout seconds since last request for host")
+	flag.StringVar(&listen, "listen", env("ESX_LISTEN", listen), "Listen port,the default value can be overridden by ESX_LISTEN")
+	flag.StringVar(&defaultUsername, "username", env("ESX_USERNAME", defaultUsername), "The default username if not provided in the request, the default value can be overridden by ESX_USERNAME")
+	flag.StringVar(&defaultPassword, "password", env("ESX_PASSWORD", defaultPassword), "The default password if not provided in the request,the default value can be overridden by ESX_PASSWORD")
+	flag.StringVar(&logLevel, "log", env("ESX_LOG", logLevel), "Log level must be debug or info, the default value can be overridden by ESX_LOG")
+	flag.Int64Var(&timeout, "timeout", envInt64("ESX_TIMEOUT", timeout), "The seconds for request timeout, the default value can be overridden by ESX_TIMEOUT")
+	flag.Int64Var(&idleTimeout, "idle_timeout", envInt64("ESX_IDLE_TIMEOUT", 7200), "The host is requested beyond the specified idle seconds will be deleted, the default value can be overridden by ESX_IDLE_TIMEOUT")
 }
 
 func getTimeout(s string) (d int64, err error) {
+	if s == "" {
+		return timeout, nil
+	}
 	d, err = strconv.ParseInt(s, 10, 0)
 	if err != nil {
 		d = timeout
@@ -72,6 +79,12 @@ func handleMulti(w http.ResponseWriter, r *http.Request) {
 		Host:     r.FormValue("host"),
 		Username: r.FormValue("username"),
 		Password: r.FormValue("password"),
+	}
+	if opts.Username == "" {
+		opts.Username = defaultUsername
+	}
+	if opts.Password == "" {
+		opts.Password = defaultPassword
 	}
 	vm, err := collector.Get(opts, logger)
 	if err != nil {
@@ -149,6 +162,7 @@ const htmlStr = `<!DOCTYPE html>
 
 func main() {
 	flag.Parse()
+	fmt.Println(defaultUsername, defaultPassword, timeout, logLevel, idleTimeout)
 	initLogger()
 	msg := fmt.Sprintf("Exporter start on port %s", listen)
 	logger.Info(msg)
