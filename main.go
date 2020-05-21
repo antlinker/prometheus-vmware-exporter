@@ -105,7 +105,12 @@ func handleMulti(w http.ResponseWriter, r *http.Request) {
 	// Handle 处理抓取请求
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(d)*time.Second)
 	defer cancel()
-	vm.Scrape(ctx, logger)
+	if err := vm.Scrape(ctx, logger); err != nil {
+		logger.Errorf("vm.Scrape %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "%s", err)
+		return
+	}
 	vm.Handle(w, r)
 }
 

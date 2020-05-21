@@ -56,7 +56,7 @@ func clean(idleTimeout time.Duration, logger *log.Logger) {
 		return true
 	})
 	for _, key := range keys {
-		outputLogger(logger, "delete metrics of %s", key)
+		outputLogger(logger, "info", "delete metrics of %s", key)
 		hosts.Delete(key)
 	}
 }
