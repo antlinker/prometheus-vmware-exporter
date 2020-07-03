@@ -15,12 +15,13 @@ func Get(opts *Options, logger *log.Logger) (*VMMetrics, error) {
 	if err := opts.Valid(); err != nil {
 		return nil, err
 	}
-	v, ok := hosts.Load(opts.Host)
+	mac := opts.mac()
+	v, ok := hosts.Load(mac)
 	if ok {
 		return v.(*VMMetrics), nil
 	}
 	vm := NewVMMetrics(opts)
-	hosts.Store(opts.Host, vm)
+	hosts.Store(mac, vm)
 	return vm, nil
 }
 

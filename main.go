@@ -100,6 +100,7 @@ func handleMulti(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "读取指标失败")
 		return
 	}
+	// logger.Debugf("target:%s,username:%s,password:%s", opts.Host, opts.Username, opts.Password)
 	timeout := r.FormValue("timeout")
 	d, err := getTimeout(timeout)
 	if err != nil {

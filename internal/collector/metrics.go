@@ -1,7 +1,10 @@
 package collector
 
 import (
+	"bytes"
 	"context"
+	"crypto/sha1"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"net/http"
@@ -212,6 +215,16 @@ type VMMetrics struct {
 // Options 选项
 type Options struct {
 	Host, Username, Password string
+}
+
+func (o Options) mac() string {
+	var buf bytes.Buffer
+	defer buf.Reset()
+	buf.WriteString(o.Host)
+	buf.WriteString(o.Username)
+	buf.WriteString(o.Password)
+	arr := sha1.Sum(buf.Bytes())
+	return hex.EncodeToString(arr[:])
 }
 
 // Valid 验证请求参数
